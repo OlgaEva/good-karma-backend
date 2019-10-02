@@ -10,17 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_17_163956) do
+ActiveRecord::Schema.define(version: 2019_09_30_152142) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "job_id"
+    t.string "organization"
+    t.string "title"
+    t.boolean "done"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_id"], name: "index_favorites_on_job_id"
+    t.index ["user_id"], name: "index_favorites_on_user_id"
+  end
 
   create_table "jobs", force: :cascade do |t|
     t.string "organization"
     t.string "address"
     t.string "title"
     t.string "description"
-    t.integer "duration"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.integer "messenger_id"
+    t.integer "messagee_id"
+    t.string "message"
+    t.integer "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -30,6 +51,7 @@ ActiveRecord::Schema.define(version: 2019_09_17_163956) do
     t.string "password_digest"
     t.integer "points"
     t.integer "monthly_goal"
+    t.boolean "admin", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -43,6 +65,8 @@ ActiveRecord::Schema.define(version: 2019_09_17_163956) do
     t.index ["user_id"], name: "index_volunteers_on_user_id"
   end
 
+  add_foreign_key "favorites", "jobs"
+  add_foreign_key "favorites", "users"
   add_foreign_key "volunteers", "jobs"
   add_foreign_key "volunteers", "users"
 end

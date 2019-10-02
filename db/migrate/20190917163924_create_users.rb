@@ -5,6 +5,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :password_digest
       t.integer :points
       t.integer :monthly_goal
+      t.boolean :admin, null: false, default: false
 
       t.timestamps
     end
