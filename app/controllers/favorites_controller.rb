@@ -1,4 +1,7 @@
 class FavoritesController < ApplicationController
+
+    before_action :find_favorite, only: [:show, :update]
+
     def index
         @favorites = Favorite.all
         
@@ -16,6 +19,7 @@ class FavoritesController < ApplicationController
     end
 
     def update
+
         @favorite.update(favorite_params)
         render json: @favorite
     end
@@ -28,4 +32,9 @@ class FavoritesController < ApplicationController
     def favorite_params
         params.require(:favorite).permit(:user_id, :job_id, :organization, :title, :done)
     end
+
+    def find_favorite
+        @favorite = Favorite.find(params[:id])
+    end
+
 end
